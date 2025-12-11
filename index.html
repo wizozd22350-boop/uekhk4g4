@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>塔羅日記 - 每日一抽 | Tarot Diary</title>
+    <meta name="description" content="探索每日的神秘指引，抽取塔羅牌並記錄你的靈性旅程。一個優雅的每日塔羅抽牌應用程式。">
+    <meta name="keywords" content="塔羅牌, 每日一抽, 塔羅日記, 大阿爾克那, 占卜">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Inline Styles -->
+    <style>
+        /* CSS 變數定義 */
+        :root {
+            --primary-bg: #0D0B1E;
+            --secondary-bg: #1A1530;
+            --card-bg: rgba(30, 25, 55, 0.95);
+            --gold: #FFD700;
+            --gold-light: #FFF4B8;
+            --gold-glow: rgba(255, 215, 0, 0.4);
+            --mystic-purple: #9B59B6;
+            --mystic-purple-light: #BB8FCE;
+            --mystic-blue: #5DADE2;
+            --deep-red: #C0392B;
+            --emerald: #27AE60;
+            --text-primary: #F5F5F5;
+            --text-secondary: #B8B5C9;
+            --text-muted: #7B778F;
+            --glass-bg: rgba(30, 25, 55, 0.7);
+            --glass-border: rgba(255, 215, 0, 0.2);
+            --glass-shadow: rgba(0, 0, 0, 0.4);
+            --transition-fast: 0.2s;
+            --transition-normal: 0.4s;
+            --transition-slow: 0.6s;
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2rem;
+            --spacing-xl: 3rem;
+            --radius-sm: 0.5rem;
+            --radius-md: 1rem;
+            --radius-lg: 1.5rem;
+            --radius-xl: 2rem;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* 星空背景效果 */
+        .stars-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background:
+                radial-gradient(ellipse at top, #1A1530 0%, #0D0B1E 100%),
+                radial-gradient(circle at 20% 80%, rgba(155, 89, 182, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 20%, rgba(93, 173, 226, 0.1) 0%, transparent 40%);
+            overflow: hidden;
+        }
+
+        .stars-bg::before,
+        .stars-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .stars-bg::before {
+            background-image:
+                radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.8), transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.6), transparent),
+                radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.9), transparent),
+                radial-gradient(2px 2px at 160px 120px, rgba(255, 255, 255, 0.7), transparent),
+                radial-gradient(1px 1px at 230px 80px, rgba(255, 255, 255, 0.5), transparent),
+                radial-gradient(2px 2px at 300px 200px, rgba(255, 215, 0, 0.8), transparent),
+                radial-gradient(1px 1px at 350px 150px, rgba(255, 255, 255, 0.6), transparent),
+                radial-gradient(2px 2px at 420px 50px, rgba(255, 255, 255, 0.7), transparent),
+                radial-gradient(1px 1px at 500px 180px, rgba(255, 255, 255, 0.5), transparent),
+                radial-gradient(2px 2px at 580px 100px, rgba(255, 215, 0, 0.6), transparent);
+            background-size: 600px 220px;
+            animation: twinkle 8s ease-in-out infinite;
+        }
+
+        .stars-bg::after {
+            background-image:
+                radial-gradient(1px 1px at 45px 95px, rgba(255, 255, 255, 0.7), transparent),
+                radial-gradient(2px 2px at 120px 180px, rgba(255, 255, 255, 0.5), transparent),
+                radial-gradient(1px 1px at 200px 60px, rgba(255, 255, 255, 0.8), transparent),
+                radial-gradient(2px 2px at 280px 140px, rgba(255, 215, 0, 0.7), transparent),
+                radial-gradient(1px 1px at 380px 220px, rgba(255, 255, 255, 0.6), transparent),
+                radial-gradient(2px 2px at 450px 90px, rgba(255, 255, 255, 0.5), transparent),
+                radial-gradient(1px 1px at 520px 160px, rgba(255, 215, 0, 0.8), transparent);
+            background-size: 550px 250px;
+            animation: twinkle 12s ease-in-out infinite reverse;
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* 主容器 */
+        .app-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: var(--spacing-md);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 頭部樣式 */
+        .app-header {
+            text-align: center;
+            padding: var(--spacing-xl) 0;
+            position: relative;
+        }
+
+        .header-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--gold-glow) 0%, transparent 70%);
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .app-title {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--gold);
+            text-shadow:
+                0 0 20px var(--gold-glow),
+                0 2px 10px rgba(0, 0, 0, 0.5);
+            margin-bottom: var(--spacing-xs);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+        }
+
+        .title-icon {
+            font-size: 2.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .app-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+            letter-spacing: 0.2em;
+        }
+
+        .user-info {
+            margin-top: var(--spacing-sm);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* 玻璃質感面板 */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--glass-border);
+            box-shadow:
+                0 8px 32px var(--glass-shadow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        /* 區域標題 */
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .section-desc {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        /* 卡牌樣式 */
+        .card-display-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: var(--spacing-lg) 0;
+        }
+
+        .card-container {
+            width: 220px;
+            height: 340px;
+            perspective: 1200px;
+        }
+
+        .tarot-card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform var(--transition-slow) cubic-bezier(0.4, 0.2, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .tarot-card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow:
+                0 15px 35px rgba(0, 0, 0, 0.5),
+                0 0 30px var(--gold-glow);
+        }
+
+        /* 卡牌背面 */
+        .card-back {
+            background: linear-gradient(135deg, #2C1654 0%, #1A0F30 100%);
+            transform: rotateY(0deg);
+        }
+
+        .card-back-design {
+            width: 100%;
+            height: 100%;
+            padding: 8px;
+        }
+
+        .card-back-border {
+            width: 100%;
+            height: 100%;
+            border: 3px solid var(--gold);
+            border-radius: var(--radius-md);
+            padding: 8px;
+            background:
+                radial-gradient(circle at 30% 20%, rgba(155, 89, 182, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(93, 173, 226, 0.2) 0%, transparent 50%);
+        }
+
+        .card-back-inner {
+            width: 100%;
+            height: 100%;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: var(--radius-sm);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-back-inner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.5), transparent),
+                radial-gradient(1px 1px at 40px 50px, rgba(255, 215, 0, 0.6), transparent),
+                radial-gradient(2px 2px at 70px 80px, rgba(255, 255, 255, 0.4), transparent),
+                radial-gradient(1px 1px at 100px 40px, rgba(255, 215, 0, 0.5), transparent),
+                radial-gradient(2px 2px at 130px 100px, rgba(255, 255, 255, 0.6), transparent),
+                radial-gradient(1px 1px at 160px 60px, rgba(255, 215, 0, 0.4), transparent),
+                radial-gradient(2px 2px at 50px 120px, rgba(255, 255, 255, 0.5), transparent),
+                radial-gradient(1px 1px at 90px 150px, rgba(255, 215, 0, 0.6), transparent),
+                radial-gradient(2px 2px at 120px 180px, rgba(255, 255, 255, 0.4), transparent),
+                radial-gradient(1px 1px at 150px 200px, rgba(255, 215, 0, 0.5), transparent);
+            background-size: 180px 220px;
+            animation: starryGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes starryGlow {
+
+            0%,
+            100% {
+                opacity: 0.8;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .mystical-symbol {
+            font-size: 3rem;
+            color: var(--gold);
+            text-shadow: 0 0 20px var(--gold-glow);
+            z-index: 1;
+            animation: symbolPulse 2s ease-in-out infinite;
+        }
+
+        .mystical-symbol.bottom {
+            font-size: 2rem;
+            margin-top: auto;
+        }
+
+        @keyframes symbolPulse {
+
+            0%,
+            100% {
+                opacity: 0.7;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        }
+
+        .card-back-pattern {
+            width: 60px;
+            height: 60px;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            position: relative;
+            margin: var(--spacing-sm) 0;
+        }
+
+        .card-back-pattern::before,
+        .card-back-pattern::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid rgba(255, 215, 0, 0.5);
+            border-radius: 50%;
+        }
+
+        .card-back-pattern::before {
+            width: 80%;
+            height: 80%;
+        }
+
+        .card-back-pattern::after {
+            width: 50%;
+            height: 50%;
+            background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+        }
+
+        /* 卡牌正面 */
+        .card-front {
+            background: linear-gradient(180deg, #FFF9E6 0%, #FFF5D4 100%);
+            transform: rotateY(180deg);
+            color: #2C1654;
+        }
+
+        .card-front-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-md);
+            border: 4px solid var(--gold);
+            border-radius: var(--radius-lg);
+            box-sizing: border-box;
+        }
+
+        .card-number {
+            font-family: 'Cinzel', serif;
+            font-size: 4rem;
+            font-weight: 700;
+            color: #8B0000;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            line-height: 1;
+        }
+
+        .card-name-display {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2C1654;
+            text-align: center;
+            margin-top: var(--spacing-sm);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-top: var(--spacing-md);
+        }
+
+        /* 逆位卡牌 */
+        .card-front.reversed .card-front-content {
+            transform: rotate(180deg);
+        }
+
+        /* 結果區域 */
+        .result-area {
+            text-align: center;
+            min-height: 120px;
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .card-name {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: var(--spacing-xs);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all var(--transition-normal);
+        }
+
+        .card-name.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card-orientation {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all var(--transition-normal) 0.1s;
+        }
+
+        .card-orientation.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card-orientation.upright {
+            color: var(--emerald);
+        }
+
+        .card-orientation.reversed {
+            color: var(--deep-red);
+        }
+
+        .card-meaning {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all var(--transition-normal) 0.2s;
+        }
+
+        .card-meaning.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 按鈕樣式 */
+        .action-area {
+            text-align: center;
+        }
+
+        .draw-button {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm) var(--spacing-xl);
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1A0F30;
+            background: linear-gradient(135deg, var(--gold) 0%, #F4C430 100%);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow:
+                0 8px 25px rgba(255, 215, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            transition: all var(--transition-fast);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .draw-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .draw-button:hover::before {
+            left: 100%;
+        }
+
+        .draw-button:hover {
+            transform: translateY(-3px);
+            box-shadow:
+                0 12px 35px rgba(255, 215, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .draw-button:active {
+            transform: translateY(-1px);
+            box-shadow:
+                0 5px 15px rgba(255, 215, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .draw-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .draw-button:disabled::before {
+            display: none;
+        }
+
+        .button-icon {
+            font-size: 1.4rem;
+        }
+
+        /* 載入動畫 */
+        .loading-spinner {
+            display: none;
+            justify-content: center;
+            padding: var(--spacing-sm);
+        }
+
+        .loading-spinner.visible {
+            display: flex;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 215, 0, 0.2);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .message {
+            margin-top: var(--spacing-sm);
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            min-height: 1.5em;
+        }
+
+        .message.error {
+            color: var(--deep-red);
+        }
+
+        .message.success {
+            color: var(--emerald);
+        }
+
+        /* 歷史記錄區域 */
+        .history-section {
+            flex: 1;
+        }
+
+        .history-list {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: var(--spacing-xs);
+        }
+
+        .history-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .history-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+
+        .history-list::-webkit-scrollbar-thumb {
+            background: var(--gold);
+            border-radius: 3px;
+        }
+
+        .history-loading {
+            text-align: center;
+            color: var(--text-muted);
+            padding: var(--spacing-lg);
+        }
+
+        .history-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-sm);
+            border-left: 4px solid var(--gold);
+            transition: all var(--transition-fast);
+        }
+
+        .history-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(5px);
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-xs);
+            gap: var(--spacing-sm);
+        }
+
+        .history-card-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        .history-date {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .history-orientation {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .history-orientation.upright {
+            color: var(--emerald);
+        }
+
+        .history-orientation.reversed {
+            color: var(--deep-red);
+        }
+
+        .history-meaning {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .history-empty {
+            text-align: center;
+            color: var(--text-muted);
+            padding: var(--spacing-xl);
+        }
+
+        .history-empty-icon {
+            font-size: 3rem;
+            margin-bottom: var(--spacing-sm);
+            opacity: 0.5;
+        }
+
+        /* 頁腳 */
+        .app-footer {
+            text-align: center;
+            padding: var(--spacing-lg) 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .app-title {
+                font-size: 2.2rem;
+            }
+
+            .title-icon {
+                font-size: 2rem;
+            }
+
+            .app-subtitle {
+                font-size: 1rem;
+                letter-spacing: 0.1em;
+            }
+
+            .card-container {
+                width: 180px;
+                height: 280px;
+            }
+
+            .section-title {
+                font-size: 1.4rem;
+            }
+
+            .card-name {
+                font-size: 1.6rem;
+            }
+
+            .draw-button {
+                padding: var(--spacing-sm) var(--spacing-lg);
+                font-size: 1.1rem;
+            }
+
+            .glass-panel {
+                padding: var(--spacing-md);
+                border-radius: var(--radius-lg);
+            }
+
+            .history-header {
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .app-container {
+                padding: var(--spacing-sm);
+            }
+
+            .app-title {
+                font-size: 1.8rem;
+                flex-direction: column;
+                gap: var(--spacing-xs);
+            }
+
+            .card-container {
+                width: 160px;
+                height: 250px;
+            }
+
+            .card-number {
+                font-size: 3rem;
+            }
+
+            .mystical-symbol {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 背景星空效果 -->
+    <div class="stars-bg" id="stars-bg"></div>
+
+    <!-- 主容器 -->
+    <div class="app-container">
+        <!-- 頭部區域 -->
+        <header class="app-header">
+            <div class="header-glow"></div>
+            <h1 class="app-title">
+                <span class="title-icon">🔮</span>
+                <span class="title-text">塔羅日記</span>
+            </h1>
+            <p class="app-subtitle">每日一抽 · 聆聽宇宙的指引</p>
+            <div class="user-info" id="user-info"></div>
+        </header>
+
+        <!-- 抽牌區域 -->
+        <main class="main-content">
+            <section class="card-section glass-panel">
+                <div class="section-header">
+                    <h2 class="section-title">✨ 今日抽牌</h2>
+                    <p class="section-desc">靜心冥想，讓直覺引導你</p>
+                </div>
+
+                <!-- 卡牌展示區 -->
+                <div class="card-display-area">
+                    <div class="card-container" id="card-container">
+                        <div class="tarot-card" id="tarot-card">
+                            <!-- 卡牌背面 -->
+                            <div class="card-face card-back">
+                                <div class="card-back-design">
+                                    <div class="card-back-border">
+                                        <div class="card-back-inner">
+                                            <div class="mystical-symbol">☽</div>
+                                            <div class="card-back-pattern"></div>
+                                            <div class="mystical-symbol bottom">☆</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 卡牌正面 -->
+                            <div class="card-face card-front" id="card-front">
+                                <div class="card-front-content">
+                                    <span class="card-number" id="card-number">?</span>
+                                    <p class="card-name-display" id="card-name-display">等待抽牌</p>
+                                    <div class="card-icon" id="card-icon">🌟</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 結果展示區 -->
+                <div class="result-area" id="result-area">
+                    <h3 class="card-name" id="card-name"></h3>
+                    <p class="card-orientation" id="card-orientation"></p>
+                    <p class="card-meaning" id="card-meaning"></p>
+                </div>
+
+                <!-- 抽牌按鈕 -->
+                <div class="action-area">
+                    <button class="draw-button" id="draw-button">
+                        <span class="button-icon">🎴</span>
+                        <span class="button-text">開始抽牌</span>
+                    </button>
+                    <div class="loading-spinner" id="loading-spinner">
+                        <div class="spinner"></div>
+                    </div>
+                    <p class="message" id="message"></p>
+                </div>
+            </section>
+
+            <!-- 歷史記錄區域 -->
+            <section class="history-section glass-panel">
+                <div class="section-header">
+                    <h2 class="section-title">📜 抽牌歷史</h2>
+                    <p class="section-desc">你的靈性旅程紀錄</p>
+                </div>
+                <div class="history-list" id="history-list">
+                    <div class="history-empty">
+                        <div class="history-empty-icon">🔮</div>
+                        <p>尚無抽牌記錄</p>
+                        <p style="font-size: 0.85rem; margin-top: 0.5rem;">抽一張牌來開始你的靈性旅程吧！</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- 頁腳 -->
+        <footer class="app-footer">
+            <p>✧ 願塔羅的智慧指引你的道路 ✧</p>
+        </footer>
+    </div>
+
+    <!-- Inline JavaScript -->
+    <script>
+        // 塔羅牌資料 - 22張大阿爾克那 (Major Arcana)
+        const MAJOR_ARCANA = [
+            { index: 0, name: "愚者 (The Fool)", icon: "🃏", upright: "冒險、開始、天真、自由、純真、探索未知", reversed: "魯莽、分心、判斷錯誤、缺乏方向、不成熟" },
+            { index: 1, name: "魔術師 (The Magician)", icon: "✨", upright: "創造力、行動、能力、實現、意志力、專注", reversed: "操控、不安全感、未開發的潛能、欺騙" },
+            { index: 2, name: "女祭司 (The High Priestess)", icon: "🌙", upright: "直覺、神秘、潛意識、智慧、內在知識", reversed: "隱藏的真相、壓抑的直覺、迷失、表面化" },
+            { index: 3, name: "皇后 (The Empress)", icon: "👑", upright: "豐饒、女性能量、美麗、自然、母性、創造", reversed: "缺乏、過度保護、依賴、創意枯竭" },
+            { index: 4, name: "皇帝 (The Emperor)", icon: "🏛️", upright: "權威、結構、控制、父權、領導力、穩定", reversed: "暴君、僵化、權力濫用、無力、過度控制" },
+            { index: 5, name: "教皇 (The Hierophant)", icon: "⛪", upright: "傳統、精神指引、儀式、規範、教育、信仰", reversed: "反叛、新方法、個人信仰、挑戰權威" },
+            { index: 6, name: "戀人 (The Lovers)", icon: "💕", upright: "愛情、和諧、選擇、關係、價值觀、結合", reversed: "失衡、衝突、錯誤的選擇、不和諧" },
+            { index: 7, name: "戰車 (The Chariot)", icon: "🏆", upright: "決心、勝利、自律、方向、意志力、克服障礙", reversed: "缺乏控制、侵略性、失敗、方向迷失" },
+            { index: 8, name: "力量 (Strength)", icon: "🦁", upright: "勇氣、慈悲、耐心、內在力量、自我控制", reversed: "自卑、缺乏自信、脆弱、恐懼" },
+            { index: 9, name: "隱者 (The Hermit)", icon: "🏔️", upright: "內省、孤獨、尋求真相、指引、智慧、沉思", reversed: "孤立、退縮、迷失方向、拒絕幫助" },
+            { index: 10, name: "命運之輪 (Wheel of Fortune)", icon: "🎡", upright: "運氣、循環、改變、宿命、轉機、機會", reversed: "壞運氣、中斷、抗拒改變、停滯" },
+            { index: 11, name: "正義 (Justice)", icon: "⚖️", upright: "公平、真相、法律、平衡、因果、決定", reversed: "不公、偏見、逃避責任、失衡" },
+            { index: 12, name: "倒吊人 (The Hanged Man)", icon: "🙃", upright: "犧牲、新視角、暫停、放下、等待、頓悟", reversed: "停滯、不願犧牲、逃避、徒勞無功" },
+            { index: 13, name: "死神 (Death)", icon: "🦋", upright: "結束、轉變、淨化、新開始、蛻變、放下", reversed: "抗拒改變、停滯、重生困難、執著" },
+            { index: 14, name: "節制 (Temperance)", icon: "☯️", upright: "平衡、和諧、耐心、適度、整合、目標", reversed: "失衡、不協調、極端、缺乏耐心" },
+            { index: 15, name: "惡魔 (The Devil)", icon: "⛓️", upright: "誘惑、束縛、物質主義、成癮、慾望、陰影", reversed: "掙脫束縛、獨立、釋放、覺醒" },
+            { index: 16, name: "高塔 (The Tower)", icon: "⚡", upright: "突變、毀滅、混亂、覺醒、解放、重建", reversed: "恐懼改變、延遲的災難、抗拒" },
+            { index: 17, name: "星星 (The Star)", icon: "⭐", upright: "希望、靈感、平靜、指引、信念、療癒", reversed: "缺乏希望、失望、迷失、絕望" },
+            { index: 18, name: "月亮 (The Moon)", icon: "🌕", upright: "幻覺、直覺、焦慮、潛意識、夢境、神秘", reversed: "困惑解除、看清事實、恐懼釋放" },
+            { index: 19, name: "太陽 (The Sun)", icon: "☀️", upright: "成功、喜悅、活力、肯定、正向、光明", reversed: "暫時的陰影、缺乏活力、悲觀" },
+            { index: 20, name: "審判 (Judgement)", icon: "📯", upright: "覺醒、內省、審視、重生、召喚、超越", reversed: "懷疑自我、逃避審判、停滯、拒絕改變" },
+            { index: 21, name: "世界 (The World)", icon: "🌍", upright: "完成、成就、旅行、圓滿、整合、循環結束", reversed: "未完成、缺乏成就感、停滯、延遲" }
+        ];
+
+        // 本地歷史記錄
+        let localHistory = [];
+
+        // UI 元素
+        const elements = {
+            drawButton: null,
+            tarotCard: null,
+            cardFront: null,
+            cardNumber: null,
+            cardNameDisplay: null,
+            cardIcon: null,
+            cardName: null,
+            cardOrientation: null,
+            cardMeaning: null,
+            historyList: null,
+            loadingSpinner: null,
+            message: null,
+            userInfo: null
+        };
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeElements();
+            initializeStarsBackground();
+
+            // 綁定抽牌按鈕事件
+            if (elements.drawButton) {
+                elements.drawButton.addEventListener('click', drawCard);
+            }
+
+            // 顯示本地模式訊息
+            showMessage("本地模式：歷史記錄僅在本次瀏覽有效", "info");
+        });
+
+        // 初始化 UI 元素
+        function initializeElements() {
+            elements.drawButton = document.getElementById('draw-button');
+            elements.tarotCard = document.getElementById('tarot-card');
+            elements.cardFront = document.getElementById('card-front');
+            elements.cardNumber = document.getElementById('card-number');
+            elements.cardNameDisplay = document.getElementById('card-name-display');
+            elements.cardIcon = document.getElementById('card-icon');
+            elements.cardName = document.getElementById('card-name');
+            elements.cardOrientation = document.getElementById('card-orientation');
+            elements.cardMeaning = document.getElementById('card-meaning');
+            elements.historyList = document.getElementById('history-list');
+            elements.loadingSpinner = document.getElementById('loading-spinner');
+            elements.message = document.getElementById('message');
+            elements.userInfo = document.getElementById('user-info');
+        }
+
+        // 初始化動態星空背景
+        function initializeStarsBackground() {
+            const starsContainer = document.getElementById('stars-bg');
+            if (!starsContainer) return;
+
+            for (let i = 0; i < 50; i++) {
+                const star = document.createElement('div');
+                star.className = 'dynamic-star';
+                star.style.cssText = `
+                    position: absolute;
+                    width: ${Math.random() * 3 + 1}px;
+                    height: ${Math.random() * 3 + 1}px;
+                    background: ${Math.random() > 0.7 ? '#FFD700' : '#FFFFFF'};
+                    border-radius: 50%;
+                    top: ${Math.random() * 100}%;
+                    left: ${Math.random() * 100}%;
+                    opacity: ${Math.random() * 0.7 + 0.3};
+                    animation: twinkle ${Math.random() * 4 + 2}s ease-in-out infinite;
+                    animation-delay: ${Math.random() * 2}s;
+                `;
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // 隨機抽取一張塔羅牌
+        function drawRandomCard() {
+            const randomIndex = Math.floor(Math.random() * MAJOR_ARCANA.length);
+            const card = MAJOR_ARCANA[randomIndex];
+            const isReversed = Math.random() < 0.5;
+
+            return {
+                index: card.index,
+                name: card.name,
+                icon: card.icon,
+                isReversed: isReversed,
+                meaning: isReversed ? card.reversed : card.upright
+            };
+        }
+
+        // 主抽牌函數
+        async function drawCard() {
+            // 禁用按鈕並顯示載入狀態
+            setLoadingState(true);
+
+            try {
+                // 執行抽牌
+                const result = drawRandomCard();
+
+                // 更新 UI
+                await updateCardUI(result);
+
+                // 儲存到本地歷史
+                saveToLocalHistory(result);
+
+                // 顯示成功訊息
+                showMessage("✨ 塔羅牌已揭示你的指引！", "success");
+
+            } catch (error) {
+                console.error("抽牌失敗:", error);
+                showMessage("抽牌失敗，請重試。", "error");
+            } finally {
+                // 恢復按鈕狀態
+                setTimeout(() => {
+                    setLoadingState(false);
+                    updateButtonText("再抽一張");
+                }, 1500);
+            }
+        }
+
+        // 設定載入狀態
+        function setLoadingState(isLoading) {
+            if (elements.drawButton) {
+                elements.drawButton.disabled = isLoading;
+                if (isLoading) {
+                    const buttonText = elements.drawButton.querySelector('.button-text');
+                    if (buttonText) buttonText.textContent = "抽牌中...";
+                }
+            }
+
+            if (elements.loadingSpinner) {
+                elements.loadingSpinner.classList.toggle('visible', isLoading);
+            }
+
+            if (elements.message && isLoading) {
+                elements.message.textContent = "";
+                elements.message.className = "message";
+            }
+        }
+
+        // 更新按鈕文字
+        function updateButtonText(text) {
+            if (elements.drawButton) {
+                const buttonText = elements.drawButton.querySelector('.button-text');
+                if (buttonText) {
+                    buttonText.textContent = text;
+                }
+            }
+        }
+
+        // 更新卡牌 UI
+        function updateCardUI(cardData) {
+            return new Promise((resolve) => {
+                // 1. 重設狀態
+                resetCardState();
+
+                // 2. 短暫延遲後更新內容
+                setTimeout(() => {
+                    // 更新卡牌正面內容
+                    if (elements.cardNumber) {
+                        elements.cardNumber.textContent = cardData.index;
+                    }
+                    if (elements.cardNameDisplay) {
+                        elements.cardNameDisplay.textContent = cardData.name;
+                    }
+                    if (elements.cardIcon) {
+                        elements.cardIcon.textContent = cardData.icon;
+                    }
+
+                    // 處理逆位
+                    if (elements.cardFront) {
+                        if (cardData.isReversed) {
+                            elements.cardFront.classList.add('reversed');
+                        } else {
+                            elements.cardFront.classList.remove('reversed');
+                        }
+                    }
+
+                    // 3. 翻轉卡牌
+                    if (elements.tarotCard) {
+                        elements.tarotCard.classList.add('flipped');
+                    }
+
+                    // 4. 延遲顯示結果文字
+                    setTimeout(() => {
+                        showResultText(cardData);
+                        resolve();
+                    }, 700);
+
+                }, 100);
+            });
+        }
+
+        // 重設卡牌狀態
+        function resetCardState() {
+            if (elements.tarotCard) {
+                elements.tarotCard.classList.remove('flipped');
+            }
+
+            if (elements.cardFront) {
+                elements.cardFront.classList.remove('reversed');
+            }
+
+            if (elements.cardName) {
+                elements.cardName.classList.remove('visible');
+            }
+            if (elements.cardOrientation) {
+                elements.cardOrientation.classList.remove('visible');
+            }
+            if (elements.cardMeaning) {
+                elements.cardMeaning.classList.remove('visible');
+            }
+        }
+
+        // 顯示結果文字
+        function showResultText(cardData) {
+            if (elements.cardName) {
+                elements.cardName.textContent = cardData.name;
+                elements.cardName.classList.add('visible');
+            }
+
+            if (elements.cardOrientation) {
+                elements.cardOrientation.textContent = cardData.isReversed ? '【逆位】' : '【正位】';
+                elements.cardOrientation.className = `card-orientation visible ${cardData.isReversed ? 'reversed' : 'upright'}`;
+            }
+
+            if (elements.cardMeaning) {
+                elements.cardMeaning.textContent = cardData.meaning;
+                elements.cardMeaning.classList.add('visible');
+            }
+        }
+
+        // 儲存到本地歷史
+        function saveToLocalHistory(cardData) {
+            const now = new Date();
+            const record = {
+                ...cardData,
+                timestamp: now,
+                date: now.toLocaleString('zh-TW', {
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })
+            };
+
+            localHistory.unshift(record);
+            renderHistory();
+        }
+
+        // 渲染歷史記錄
+        function renderHistory() {
+            if (!elements.historyList) return;
+
+            elements.historyList.innerHTML = '';
+
+            if (localHistory.length === 0) {
+                elements.historyList.innerHTML = `
+                    <div class="history-empty">
+                        <div class="history-empty-icon">🔮</div>
+                        <p>尚無抽牌記錄</p>
+                        <p style="font-size: 0.85rem; margin-top: 0.5rem;">抽一張牌來開始你的靈性旅程吧！</p>
+                    </div>
+                `;
+                return;
+            }
+
+            localHistory.forEach(item => {
+                const orientationText = item.isReversed ? '逆位' : '正位';
+                const orientationClass = item.isReversed ? 'reversed' : 'upright';
+
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <div class="history-header">
+                        <span class="history-card-name">${item.icon} ${item.name}</span>
+                        <span class="history-date">${item.date}</span>
+                    </div>
+                    <p class="history-orientation ${orientationClass}">【${orientationText}】</p>
+                    <p class="history-meaning">${item.meaning}</p>
+                `;
+
+                elements.historyList.appendChild(historyItem);
+            });
+        }
+
+        // 顯示訊息
+        function showMessage(text, type = "info") {
+            if (elements.message) {
+                elements.message.textContent = text;
+                elements.message.className = `message ${type}`;
+            }
+        }
+    </script>
+</body>
+
+</html>
